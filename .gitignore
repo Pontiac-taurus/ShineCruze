@@ -1,7 +1,0 @@
-
-node_modules
-.env
-.dev.db
-/mnt/data
-.next
-coverage

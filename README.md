@@ -1,48 +1,71 @@
-# MGX Fullstack — Next.js + Supabase (Email/Password Auth)
+# Shinecruze Car Detailing
 
-This repository is a Vercel-ready Next.js app with Supabase Auth (email/password), Prisma (Postgres), and a simple services CRUD.
+This is a full-stack web application for a car detailing company named Shinecruze.
 
 ## Features
-- Next.js (App Router)
-- Supabase Auth (email/password)
-- Prisma ORM (Postgres on Supabase)
-- Tailwind CSS
-- API routes protected via Supabase session
 
-## Local setup
+- Customer-facing website to book car detailing services.
+- Admin panel to manage bookings, services, and content.
+- Secure authentication for the admin panel.
+- Transactional emails for booking confirmations.
 
-1. Install dependencies:
-```bash
-npm install
-```
+## Tech Stack
 
-2. Copy env:
-```bash
-cp .env.example .env.local
-```
+- **Frontend:** Next.js (React), Tailwind CSS, TypeScript
+- **Backend:** Next.js API Routes
+- **Database:** PostgreSQL with Prisma ORM
+- **Authentication:** NextAuth.js
+- **Emails:** Resend
 
-3. Fill `.env.local` with your Supabase project values:
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `DATABASE_URL`
+## Getting Started
 
-4. Run Prisma migrate & seed:
-```bash
-npx prisma migrate deploy
-node prisma/seed.js
-```
+### Prerequisites
 
-5. Run dev:
-```bash
-npm run dev
-```
+- Node.js (v18 or later)
+- npm
+- PostgreSQL
 
-## Deploy to Vercel
+### Installation
 
-1. Push to GitHub.
-2. Import project in Vercel.
-3. Add Environment Variables in Vercel (same as .env.local).
-4. Deploy.
+1.  **Clone the repository:**
 
-## Notes
-- This setup uses Supabase for Auth and Postgres. Email/password is enabled by default in Supabase Auth.
+    ```bash
+    git clone https://github.com/your-username/shinecruze.git
+    cd shinecruze
+    ```
+
+2.  **Install dependencies:**
+
+    ```bash
+    npm install
+    ```
+
+3.  **Set up environment variables:**
+
+    Create a `.env` file in the root of the project by copying the example file:
+
+    ```bash
+    cp .env.example .env
+    ```
+
+    Then, fill in the required values in the `.env` file.
+
+4.  **Set up the database:**
+
+    Make sure your PostgreSQL server is running. Then, apply the database schema:
+
+    ```bash
+    npx prisma migrate dev
+    ```
+
+5.  **Run the development server:**
+
+    ```bash
+    npm run dev
+    ```
+
+    The application will be available at `http://localhost:3000`.
+
+## Deployment
+
+The application is configured for deployment on Vercel. You will need to set up a PostgreSQL database (e.g., on Supabase or Neon) and configure the environment variables in your Vercel project settings.

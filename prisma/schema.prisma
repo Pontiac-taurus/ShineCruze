@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ENUMS
+
+enum Role {
+  ADMIN
+}
+
+enum ServiceCategory {
+  INTERIOR
+  EXTERIOR
+  ADDON
+}
+
+enum BookingStatus {
+  PENDING
+  ACCEPTED
+  DENIED
+  COMPLETED
+  CANCELED
+}
+
+// MODELS
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Service {
+  id             String           @id @default(cuid())
+  title          String
+  category       ServiceCategory
+  basePrice      Float
+  duration       Int // in minutes
+  items          String[]
+  vehiclePricing Json? // e.g., { "hatchback": 130, "sedan": 150 }
+  bookings       BookingService[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+}
+
+model Booking {
+  id              String        @id @default(cuid())
+  customerName    String
+  customerEmail   String
+  customerPhone   String
+  customerAddress String
+  startAt         DateTime
+  endAt           DateTime
+  status          BookingStatus @default(PENDING)
+  totalPrice      Float
+  services        BookingService[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+// Join table for many-to-many relationship between Booking and Service
+model BookingService {
+  id        String  @id @default(cuid())
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  bookingId String
+  service   Service @relation(fields: [serviceId], references: [id])
+  serviceId String
+  price     Float // Price of the service at the time of booking
+
+  @@unique([bookingId, serviceId])
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  quote     String   @db.Text
+  rating    Int      @default(5)
+  isVisible Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Media {
+  id        String   @id @default(cuid())
+  url       String
+  altText   String?
+  category  String // e.g., "gallery", "service_image"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

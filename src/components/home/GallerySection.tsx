@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Media } from '@prisma/client';
+import Image from 'next/image';
 
 export function GallerySection() {
   const [images, setImages] = useState<Media[]>([]);
@@ -35,7 +36,7 @@ export function GallerySection() {
               A Glimpse of Our Work
             </h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Browse through our gallery to see the stunning transformations we've performed.
+              Browse through our gallery to see the stunning transformations we&apos;ve performed.
             </p>
           </div>
         </div>
@@ -47,9 +48,11 @@ export function GallerySection() {
           ) : (
             images.map((image) => (
               <div key={image.id} className="overflow-hidden rounded-lg">
-                <img
+                <Image
                   src={image.url}
                   alt={image.altText || 'Gallery image'}
+                  width={300}
+                  height={300}
                   className="aspect-square w-full object-cover transition-transform duration-300 ease-in-out hover:scale-105"
                 />
               </div>

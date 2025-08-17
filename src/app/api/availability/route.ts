@@ -45,11 +45,8 @@ export async function GET(req: Request) {
 
     // Generate all possible time slots for the day
     const allSlots = [];
-    let currentSlot = new Date(dayStart);
-
-    while (currentSlot < dayEnd) {
-      allSlots.push(new Date(currentSlot));
-      currentSlot.setUTCMinutes(currentSlot.getUTCMinutes() + SLOT_DURATION_MINUTES);
+    for (let time = dayStart.getTime(); time < dayEnd.getTime(); time += SLOT_DURATION_MINUTES * 60000) {
+        allSlots.push(new Date(time));
     }
 
     // Filter out slots that overlap with existing bookings

@@ -36,7 +36,7 @@ export default function TestimonialsAdminPage() {
       await fetch(`/api/admin/testimonials/${id}`, { method: 'DELETE' });
       toast({ title: 'Success', description: 'Testimonial deleted.' });
       fetchTestimonials();
-    } catch (error) {
+    } catch {
       toast({ title: 'Error', description: 'Could not delete testimonial.', variant: 'destructive' });
     }
   };

@@ -4,17 +4,21 @@ import { AdminLayout } from '@/components/admin/AdminLayout';
 import { ServiceForm } from '@/components/admin/ServiceForm';
 import { Service } from '@prisma/client';
 import { useEffect, useState, useCallback } from 'react';
+import { useParams } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 
-export default function EditServicePage({ params }: { params: { id: string } }) {
+export default function EditServicePage() {
   const [service, setService] = useState<Service | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const params = useParams();
   const { toast } = useToast();
 
   const fetchService = useCallback(async () => {
+    const id = params.id;
+    if (!id) return;
     setIsLoading(true);
     try {
-      const res = await fetch(`/api/admin/services/${params.id}`);
+      const res = await fetch(`/api/admin/services/${id}`);
       if (!res.ok) throw new Error('Service not found');
       const data = await res.json();
       setService(data);

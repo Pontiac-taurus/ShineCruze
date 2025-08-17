@@ -11,10 +11,10 @@ function ServiceCard({ service, vehicleType }: { service: Service; vehicleType: 
   const { addToCart } = useCart();
 
   const getPrice = () => {
-    if (service.category !== 'INTERIOR' || !service.vehiclePricing) {
+    if (service.category !== 'INTERIOR' || !service.vehiclePricing || typeof service.vehiclePricing !== 'object') {
       return service.basePrice;
     }
-    const pricing = service.vehiclePricing as any;
+    const pricing = service.vehiclePricing as Record<string, number>;
     // The vehicle pricing in the requirements has specific keys
     const vehiclePriceKey = {
       hatchback: 'Hatchback car',

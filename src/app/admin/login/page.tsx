@@ -36,7 +36,7 @@ export default function LoginPage() {
       } else {
         router.replace('/admin');
       }
-    } catch (err) {
+    } catch {
       setError('An unexpected error occurred.');
     }
   };

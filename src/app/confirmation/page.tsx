@@ -7,7 +7,7 @@ export default function ConfirmationPage() {
         <CircleCheckIcon className="mx-auto h-16 w-16 text-green-500" />
         <h1 className="text-4xl font-bold">Booking Submitted!</h1>
         <p className="max-w-md text-muted-foreground">
-          Thank you for your request. Your booking is now pending approval. You will receive an email confirmation once it's been accepted by our team.
+          Thank you for your request. Your booking is now pending approval. You will receive an email confirmation once it&apos;s been accepted by our team.
         </p>
         <Link
           href="/"

@@ -35,19 +35,23 @@ export default function BookingsManagementPage() {
     fetchBookings();
   }, [fetchBookings]);
 
-  const handleStatusUpdate = async (bookingId: string, endpoint: string, successMessage: string) => {
+  const handleStatusUpdate = async (bookingId: string, status: BookingStatus) => {
     try {
-        const res = await fetch(`/api/admin/bookings/${bookingId}/${endpoint}`, { method: 'PATCH' });
-        if (!res.ok) throw new Error(`Failed to ${endpoint} booking`);
-        toast({ title: 'Success', description: successMessage });
+        const res = await fetch(`/api/admin/bookings/${bookingId}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status }),
+        });
+        if (!res.ok) throw new Error(`Failed to update booking status`);
+        toast({ title: 'Success', description: `Booking status updated to ${status}.` });
         fetchBookings(); // Refetch to update the list
-    } catch(error) {
+    } catch {
         toast({ title: 'Error', description: `Could not update booking.`, variant: 'destructive' });
     }
   };
 
-  const handleAccept = (id: string) => handleStatusUpdate(id, 'accept', 'Booking accepted.');
-  const handleDeny = (id: string) => handleStatusUpdate(id, 'deny', 'Booking denied.');
+  const handleAccept = (id: string) => handleStatusUpdate(id, 'ACCEPTED');
+  const handleDeny = (id: string) => handleStatusUpdate(id, 'DENIED');
 
   return (
     <AdminLayout>

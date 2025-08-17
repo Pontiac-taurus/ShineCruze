@@ -43,8 +43,9 @@ export default function ServicesAdminPage() {
       }
       toast({ title: 'Success', description: 'Service deleted successfully.' });
       fetchServices(); // Refresh list
-    } catch (error: any) {
-      toast({ title: 'Error', description: error.message || 'Could not delete service.', variant: 'destructive' });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Could not delete service.';
+      toast({ title: 'Error', description: message, variant: 'destructive' });
     }
   };
 

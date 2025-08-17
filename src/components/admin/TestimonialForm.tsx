@@ -41,7 +41,7 @@ export function TestimonialForm({ testimonial }: TestimonialFormProps) {
       toast({ title: 'Success', description: `Testimonial has been ${testimonial ? 'updated' : 'created'}.` });
       router.push('/admin/testimonials');
       router.refresh();
-    } catch (e) {
+    } catch {
       toast({ title: 'Error', description: 'Could not save testimonial.', variant: 'destructive' });
     }
   };

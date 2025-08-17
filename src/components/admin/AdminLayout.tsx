@@ -1,7 +1,6 @@
 'use client';
 
 import { useSession, signOut } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
@@ -17,7 +16,6 @@ function NavLink({ href, children }: { href: string; children: ReactNode }) {
 
 export function AdminLayout({ children }: { children: ReactNode }) {
   const { data: session, status } = useSession();
-  const router = useRouter();
 
   if (status === 'loading') {
     return <div className="flex h-screen items-center justify-center">Loading...</div>;

@@ -4,13 +4,7 @@ import { isAdmin } from '@/lib/session';
 import { updateBookingSchema } from '@/lib/validations/booking';
 import { z } from 'zod';
 
-interface RouteContext {
-  params: {
-    id: string;
-  };
-}
-
-export async function PATCH(req: Request, { params }: RouteContext) {
+export async function PATCH(req: Request, context: { params: { id: string } }) {
     const userIsAdmin = await isAdmin();
     if (!userIsAdmin) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
@@ -21,7 +15,7 @@ export async function PATCH(req: Request, { params }: RouteContext) {
         const body = updateBookingSchema.parse(json);
 
         const updatedBooking = await prisma.booking.update({
-            where: { id: params.id },
+            where: { id: context.params.id },
             data: body,
         });
 
@@ -35,7 +29,7 @@ export async function PATCH(req: Request, { params }: RouteContext) {
     }
 }
 
-export async function DELETE(req: Request, { params }: RouteContext) {
+export async function DELETE(_req: Request, context: { params: { id: string } }) {
     const userIsAdmin = await isAdmin();
     if (!userIsAdmin) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
@@ -43,7 +37,7 @@ export async function DELETE(req: Request, { params }: RouteContext) {
 
     try {
         await prisma.booking.delete({
-            where: { id: params.id },
+            where: { id: context.params.id },
         });
         return new NextResponse(null, { status: 204 });
     } catch (error) {

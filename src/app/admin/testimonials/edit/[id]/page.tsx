@@ -4,17 +4,21 @@ import { AdminLayout } from '@/components/admin/AdminLayout';
 import { TestimonialForm } from '@/components/admin/TestimonialForm';
 import { Testimonial } from '@prisma/client';
 import { useEffect, useState, useCallback } from 'react';
+import { useParams } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 
-export default function EditTestimonialPage({ params }: { params: { id: string } }) {
+export default function EditTestimonialPage() {
   const [testimonial, setTestimonial] = useState<Testimonial | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const params = useParams();
   const { toast } = useToast();
 
   const fetchTestimonial = useCallback(async () => {
+    const id = params.id;
+    if (!id) return;
     setIsLoading(true);
     try {
-      const res = await fetch(`/api/admin/testimonials/${params.id}`);
+      const res = await fetch(`/api/admin/testimonials/${id}`);
       if (!res.ok) throw new Error('Testimonial not found');
       const data = await res.json();
       setTestimonial(data);

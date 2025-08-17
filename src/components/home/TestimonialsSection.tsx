@@ -36,7 +36,7 @@ export function TestimonialsSection() {
               Trusted by Car Lovers
             </h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Don't just take our word for it. Here's what our satisfied customers have to say about their Shinecruze experience.
+              Don&apos;t just take our word for it. Here&apos;s what our satisfied customers have to say about their Shinecruze experience.
             </p>
           </div>
         </div>

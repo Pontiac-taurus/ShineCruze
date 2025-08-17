@@ -52,19 +52,17 @@ function CustomerDetailsStep({ onNext }: { onNext: (data: CustomerDetailsForm) =
 // --- Step 2: Date & Time ---
 function DateTimeStep({ onBack, onNext }: { onBack: () => void; onNext: (data: { startAt: Date }) => void; }) {
     // Placeholder for a real calendar component
-    const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
     const [availableSlots, setAvailableSlots] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
     const handleDateChange = async (date: Date) => {
-        setSelectedDate(date);
         setIsLoading(true);
         try {
             const dateString = date.toISOString().split('T')[0];
             const response = await fetch(`/api/availability?date=${dateString}`);
             const data = await response.json();
             setAvailableSlots(data);
-        } catch (error) {
+        } catch {
             console.error("Failed to fetch availability");
         } finally {
             setIsLoading(false);
@@ -96,15 +94,20 @@ function DateTimeStep({ onBack, onNext }: { onBack: () => void; onNext: (data: {
 
 
 // --- Step 3: Confirmation ---
-function ConfirmationStep({ bookingData, onBack, onConfirm }: { bookingData: any, onBack: () => void; onConfirm: () => void; }) {
+interface BookingData {
+    customer?: CustomerDetailsForm;
+    dateTime?: { startAt: Date; endAt: Date };
+}
+
+function ConfirmationStep({ bookingData, onBack, onConfirm }: { bookingData: BookingData, onBack: () => void; onConfirm: () => void; }) {
     const { getCartTotal, cartItems } = useCart();
 
     return (
         <div className="space-y-4">
             <h3 className="font-bold">Confirm Your Details</h3>
-            <p>Name: {bookingData.customer.customerName}</p>
-            <p>Email: {bookingData.customer.customerEmail}</p>
-            <p>Time: {new Date(bookingData.dateTime.startAt).toLocaleString()}</p>
+            <p>Name: {bookingData.customer?.customerName}</p>
+            <p>Email: {bookingData.customer?.customerEmail}</p>
+            <p>Time: {bookingData.dateTime ? new Date(bookingData.dateTime.startAt).toLocaleString() : 'N/A'}</p>
             <h3 className="font-bold mt-4">Services</h3>
             <ul>{cartItems.map(i => <li key={i.id}>{i.title} - ${i.price}</li>)}</ul>
             <p className="font-bold mt-2">Total: ${getCartTotal()}</p>
@@ -119,7 +122,7 @@ function ConfirmationStep({ bookingData, onBack, onConfirm }: { bookingData: any
 export default function BookingPage() {
   const { cartItems, getCartTotal, removeFromCart, clearCart } = useCart();
   const [currentStep, setCurrentStep] = useState(1);
-  const [bookingData, setBookingData] = useState({});
+  const [bookingData, setBookingData] = useState<BookingData>({});
   const { toast } = useToast();
   const router = useRouter();
 
@@ -137,8 +140,8 @@ export default function BookingPage() {
 
   const handleConfirmBooking = async () => {
     const finalData = {
-        ...(bookingData as any).customer,
-        ...(bookingData as any).dateTime,
+        ...bookingData.customer,
+        ...bookingData.dateTime,
         totalPrice: getCartTotal(),
         services: cartItems.map(item => ({ serviceId: item.id, price: item.price })),
     };
@@ -155,7 +158,7 @@ export default function BookingPage() {
         toast({ title: "Booking successful!", description: "Check your email for confirmation." });
         clearCart();
         router.push('/confirmation'); // Redirect to a confirmation page
-    } catch (error) {
+    } catch {
         toast({ title: "Error", description: "Something went wrong.", variant: 'destructive' });
     }
   };

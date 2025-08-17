@@ -4,13 +4,7 @@ import { isAdmin } from '@/lib/session';
 import { updateServiceSchema } from '@/lib/validations/service';
 import { z } from 'zod';
 
-interface RouteContext {
-  params: {
-    id: string;
-  };
-}
-
-export async function GET(req: Request, { params }: RouteContext) {
+export async function GET(_req: Request, context: { params: { id: string } }) {
   const userIsAdmin = await isAdmin();
   if (!userIsAdmin) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
@@ -18,7 +12,7 @@ export async function GET(req: Request, { params }: RouteContext) {
 
   try {
     const service = await prisma.service.findUnique({
-      where: { id: params.id },
+      where: { id: context.params.id },
     });
     if (!service) {
       return NextResponse.json({ error: 'Service not found' }, { status: 404 });
@@ -30,7 +24,7 @@ export async function GET(req: Request, { params }: RouteContext) {
   }
 }
 
-export async function PATCH(req: Request, { params }: RouteContext) {
+export async function PATCH(req: Request, context: { params: { id: string } }) {
     const userIsAdmin = await isAdmin();
     if (!userIsAdmin) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
@@ -41,7 +35,7 @@ export async function PATCH(req: Request, { params }: RouteContext) {
         const body = updateServiceSchema.parse(json);
 
         const updatedService = await prisma.service.update({
-            where: { id: params.id },
+            where: { id: context.params.id },
             data: {
                 title: body.title,
                 category: body.category,
@@ -62,7 +56,7 @@ export async function PATCH(req: Request, { params }: RouteContext) {
     }
 }
 
-export async function DELETE(req: Request, { params }: RouteContext) {
+export async function DELETE(req: Request, context: { params: { id: string } }) {
     const userIsAdmin = await isAdmin();
     if (!userIsAdmin) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
@@ -70,7 +64,7 @@ export async function DELETE(req: Request, { params }: RouteContext) {
 
     try {
         await prisma.service.delete({
-            where: { id: params.id },
+            where: { id: context.params.id },
         });
         return new NextResponse(null, { status: 204 });
     } catch (error) {

@@ -23,7 +23,7 @@ export function ServiceForm({ service }: ServiceFormProps) {
         ...service,
         basePrice: service.basePrice,
         duration: service.duration,
-        vehiclePricing: service.vehiclePricing as any || {},
+        vehiclePricing: (service.vehiclePricing && typeof service.vehiclePricing === 'object' ? service.vehiclePricing : {}) as Record<string, number>,
     } : {
       title: '',
       category: 'INTERIOR',
@@ -53,7 +53,7 @@ export function ServiceForm({ service }: ServiceFormProps) {
       toast({ title: 'Success', description: `Service has been ${service ? 'updated' : 'created'}.` });
       router.push('/admin/services');
       router.refresh(); // Refresh server components
-    } catch (e) {
+    } catch {
       toast({ title: 'Error', description: 'Could not save service.', variant: 'destructive' });
     }
   };

@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export function AboutSection() {
   return (
     <section id="about" className="w-full py-12 md:py-24 lg:py-32 bg-muted">
@@ -11,8 +13,7 @@ export function AboutSection() {
           </p>
         </div>
         <div className="flex justify-center">
-            {/* In a real app, you would use Next/Image here */}
-            <img
+            <Image
                 src="https://via.placeholder.com/550x310"
                 alt="About Us Image"
                 className="overflow-hidden rounded-xl object-cover object-center"
